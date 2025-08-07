@@ -1,0 +1,91 @@
+### Test BookingService API with Repository Pattern
+
+### 1. Check Storage Type
+GET {{baseUrl}}/api/booking/storage-type
+
+### 2. Test endpoint
+GET {{baseUrl}}/api/booking/test
+
+### 3. Get all rooms
+GET {{baseUrl}}/api/booking/rooms
+
+### 4. Get room amenities
+GET {{baseUrl}}/api/booking/rooms/Deluxe/amenities
+
+### 5. Check room availability
+GET {{baseUrl}}/api/booking/availability?roomType=Deluxe&checkIn=2024-01-15&checkOut=2024-01-17&rooms=1
+
+### 6. Get all bookings
+GET {{baseUrl}}/api/booking/all
+
+### 7. Create a new booking (Single)
+POST {{baseUrl}}/api/booking
+Content-Type: application/json
+
+{
+  "customerName": "John Doe",
+  "checkIn": "2024-01-15T00:00:00",
+  "checkOut": "2024-01-17T00:00:00",
+  "username": "johndoe",
+  "note": "Early check-in preferred",
+  "numberOfRooms": 1,
+  "roomType": "Deluxe",
+  "adult": 2,
+  "children": 1,
+  "bookingType": "Single",
+  "amenities": ["Wi-Fi", "TV", "Mini Bar"]
+}
+
+### 8. Create a recurring booking
+POST {{baseUrl}}/api/booking
+Content-Type: application/json
+
+{
+  "customerName": "Jane Smith",
+  "checkIn": "2024-01-20T00:00:00",
+  "checkOut": "2024-02-20T00:00:00",
+  "username": "janesmith",
+  "note": "Weekly business trip",
+  "numberOfRooms": 1,
+  "roomType": "Standard",
+  "adult": 1,
+  "children": 0,
+  "bookingType": "Recurring",
+  "frequency": "Weekly",
+  "interval": 1,
+  "days": ["Monday", "Wednesday", "Friday"]
+}
+
+### 9. Get user bookings
+GET {{baseUrl}}/api/booking/user/johndoe
+
+### 10. Get booking by ID (replace {bookingId} with actual ID)
+GET {{baseUrl}}/api/booking/{bookingId}
+
+### 11. Update booking (replace {bookingId} with actual ID)
+PUT {{baseUrl}}/api/booking/{bookingId}
+Content-Type: application/json
+
+{
+  "customerName": "John Doe Updated",
+  "checkIn": "2024-01-15T00:00:00",
+  "checkOut": "2024-01-18T00:00:00",
+  "username": "johndoe",
+  "note": "Updated note",
+  "numberOfRooms": 2,
+  "roomType": "Deluxe",
+  "adult": 2,
+  "children": 1,
+  "bookingType": "Single",
+  "amenities": ["Wi-Fi", "TV", "Mini Bar", "Ocean View"]
+}
+
+### 12. Delete booking (replace {bookingId} with actual ID)
+DELETE {{baseUrl}}/api/booking/{bookingId}
+
+### 13. Test Thread Safety (Concurrent Requests)
+# This demonstrates thread-safe I/O operations
+GET {{baseUrl}}/api/booking/all
+
+### Variables
+@baseUrl = https://localhost:7283 

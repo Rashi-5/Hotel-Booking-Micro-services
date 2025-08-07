@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfRoomCardViewModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <RoomCardViewModel>
+    <Id>0</Id>
+    <RoomName>Deluxe Suite</RoomName>
+    <ImageUrl>/images/delux.jpg</ImageUrl>
+    <Description>Luxurious room with sea view, private balcony, and jacuzzi.</Description>
+    <Amenities>
+      <string>King Bed</string>
+      <string>Wi-Fi</string>
+      <string>Jacuzzi</string>
+      <string>Mini Bar</string>
+    </Amenities>
+    <isDefault>true</isDefault>
+    <Price>299.99</Price>
+    <NumberOfRooms>5</NumberOfRooms>
+  </RoomCardViewModel>
+  <RoomCardViewModel>
+    <Id>0</Id>
+    <RoomName>Standard Room</RoomName>
+    <ImageUrl>/images/standard.jpg</ImageUrl>
+    <Description>Affordable comfort for business or short stays.</Description>
+    <Amenities>
+      <string>Queen Bed</string>
+      <string>Wi-Fi</string>
+      <string>TV</string>
+    </Amenities>
+    <isDefault>true</isDefault>
+    <Price>149.99</Price>
+    <NumberOfRooms>5</NumberOfRooms>
+  </RoomCardViewModel>
+  <RoomCardViewModel>
+    <Id>0</Id>
+    <RoomName>Family Room</RoomName>
+    <ImageUrl>/images/family.jpg</ImageUrl>
+    <Description>Spacious room ideal for families with kids.</Description>
+    <Amenities>
+      <string>Two Double Beds</string>
+      <string>Wi-Fi</string>
+      <string>Play Area</string>
+      <string>Extra Sofa</string>
+    </Amenities>
+    <isDefault>true</isDefault>
+    <Price>199.99</Price>
+    <NumberOfRooms>5</NumberOfRooms>
+  </RoomCardViewModel>
+</ArrayOfRoomCardViewModel>

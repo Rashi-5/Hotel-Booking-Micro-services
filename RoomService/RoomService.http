@@ -1,0 +1,66 @@
+### Test RoomService API with Repository Pattern
+
+### 1. Check Storage Type
+GET {{baseUrl}}/api/room/storage-type
+
+### 2. Get All Rooms
+GET {{baseUrl}}/api/room
+
+### 3. Get Room by ID
+GET {{baseUrl}}/api/room/1
+
+### 4. Search Room by Name
+GET {{baseUrl}}/api/room/search?roomName=Deluxe Suite
+
+### 5. Create New Room (Database/XML)
+POST {{baseUrl}}/api/room
+Content-Type: application/json
+
+{
+  "roomName": "Executive Suite",
+  "imageUrl": "/images/executive.jpg",
+  "description": "Luxurious executive suite with city view",
+  "amenities": "King Bed,Wi-Fi,Jacuzzi,Mini Bar,City View",
+  "isDefault": false,
+  "price": "399.99",
+  "numberOfRooms": 3
+}
+
+### 6. Create Room with Amenities List (will be converted to comma-separated)
+POST {{baseUrl}}/api/room
+Content-Type: application/json
+
+{
+  "roomName": "Presidential Suite",
+  "imageUrl": "/images/presidential.jpg",
+  "description": "Ultimate luxury with panoramic views",
+  "amenities": "King Bed,Wi-Fi,Jacuzzi,Mini Bar,Ocean View,Private Balcony,Butler Service",
+  "isDefault": false,
+  "price": "599.99",
+  "numberOfRooms": 2
+}
+
+### 7. Update Room
+PUT {{baseUrl}}/api/room/1
+Content-Type: application/json
+
+{
+  "id": 1,
+  "roomName": "Updated Deluxe Suite",
+  "imageUrl": "/images/deluxe-updated.jpg",
+  "description": "Updated luxurious room with enhanced amenities",
+  "amenities": "King Bed,Wi-Fi,Jacuzzi,Mini Bar,Smart TV",
+  "isDefault": true,
+  "price": "349.99",
+  "numberOfRooms": 5
+}
+
+### 8. Delete Room
+DELETE {{baseUrl}}/api/room/3
+
+### 9. Test Thread Safety (Concurrent Requests)
+# This demonstrates thread-safe I/O operations
+GET {{baseUrl}}/api/room
+
+### Variables
+@baseUrl = https://localhost:5238 

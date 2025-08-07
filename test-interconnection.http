@@ -1,0 +1,33 @@
+### Test Room Service - Get All Rooms
+GET http://localhost:5238/api/room
+Content-Type: application/json
+
+### Test Room Service - Check Availability
+GET http://localhost:5238/api/room/availability?roomName=Deluxe%20Room&checkIn=2024-01-15&checkOut=2024-01-17&numberOfRooms=2
+Content-Type: application/json
+
+### Test Booking Service - Get All Rooms (should call Room Service)
+GET http://localhost:5211/api/booking/rooms
+Content-Type: application/json
+
+### Test Booking Service - Check Availability (should call Room Service)
+GET http://localhost:5211/api/booking/availability?roomType=Deluxe%20Room&checkIn=2024-01-15&checkOut=2024-01-17&rooms=2
+Content-Type: application/json
+
+### Test Booking Service - Create Booking (should check Room Service first)
+POST http://localhost:5211/api/booking
+Content-Type: application/json
+
+{
+  "customerName": "John Doe",
+  "checkIn": "2024-01-15T00:00:00",
+  "checkOut": "2024-01-17T00:00:00",
+  "username": "johndoe",
+  "note": "Test booking",
+  "numberOfRooms": 1,
+  "roomType": "Deluxe Room",
+  "adult": 2,
+  "children": 0,
+  "bookingType": "Single",
+  "amenities": []
+}
