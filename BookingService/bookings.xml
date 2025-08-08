@@ -137,37 +137,15 @@
     </Amenities>
   </BookingFormModel>
   <BookingFormModel>
-    <BookingId>ed95fa35-8cd2-442a-b9a7-8620a567a307</BookingId>
-    <CustomerName>user1</CustomerName>
-    <CheckIn>2025-08-09T00:00:00</CheckIn>
-    <CheckOut>2025-08-19T00:00:00</CheckOut>
-    <Username>user1</Username>
-    <Note>note</Note>
-    <NumberOfRooms>1</NumberOfRooms>
-    <TotalPrice>0</TotalPrice>
-    <RoomType>Standard Room</RoomType>
-    <Adult>1</Adult>
-    <Children>0</Children>
-    <BookingType>onetime</BookingType>
-    <Frequency>0</Frequency>
-    <Interval>1</Interval>
-    <Days>
-      <string xsi:nil="true" />
-    </Days>
-    <Amenities>
-      <string xsi:nil="true" />
-    </Amenities>
-  </BookingFormModel>
-  <BookingFormModel>
     <BookingId>66d16780-ed36-48cd-b13a-11d96e7e6e39</BookingId>
     <CustomerName>user1</CustomerName>
     <CheckIn>2025-08-09T00:00:00</CheckIn>
     <CheckOut>2025-08-22T00:00:00</CheckOut>
     <Username>user1</Username>
     <Note>No special requests</Note>
-    <NumberOfRooms>1</NumberOfRooms>
-    <TotalPrice>0</TotalPrice>
-    <RoomType>Standard Room</RoomType>
+    <NumberOfRooms>2</NumberOfRooms>
+    <TotalPrice>7799.74</TotalPrice>
+    <RoomType>Deluxe Suite</RoomType>
     <Adult>1</Adult>
     <Children>0</Children>
     <BookingType>OneTime</BookingType>
@@ -186,21 +164,23 @@
     <CheckIn>2025-08-10T00:00:00</CheckIn>
     <CheckOut>2025-08-29T00:00:00</CheckOut>
     <Username>user1</Username>
-    <Note />
+    <Note>abc</Note>
     <NumberOfRooms>1</NumberOfRooms>
-    <TotalPrice>3799.81</TotalPrice>
+    <TotalPrice>399.98</TotalPrice>
     <RoomType>Family Room</RoomType>
     <Adult>1</Adult>
     <Children>0</Children>
-    <BookingType>OneTime</BookingType>
-    <Frequency>0</Frequency>
-    <Interval>1</Interval>
-    <Days />
+    <BookingType>Recurring</BookingType>
+    <Frequency>Weekly</Frequency>
+    <Interval>2</Interval>
+    <Days>
+      <string>Wednesday</string>
+      <string>Sunday</string>
+    </Days>
     <Amenities>
-      <string>Two Double Beds</string>
       <string>Wi-Fi</string>
-      <string>Play Area</string>
-      <string>Extra Sofa</string>
+      <string>TV</string>
+      <string>Air Conditioning</string>
     </Amenities>
   </BookingFormModel>
 </ArrayOfBookingFormModel>

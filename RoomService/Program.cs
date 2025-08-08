@@ -2,6 +2,11 @@ using Microsoft.EntityFrameworkCore;
 using HotelBookingSystem.Data;
 using HotelBookingSystem.Services;
 using HotelBookingSystem.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,20 +45,59 @@ else
 // Register services
 builder.Services.AddScoped<RoomManager>();
 
+// JWT Authentication
+builder.Services.AddAuthentication("Bearer")
+    .AddJwtBearer("Bearer", options =>
+    {
+        options.RequireHttpsMetadata = false;
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = "HotelBookingSystem",
+            ValidAudience = "HotelBookingSystemUsers",
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:SecretKey"] 
+                    ?? builder.Configuration["Jwt:Secret"] 
+                    ?? "5V8wVD4WNUsVQqNyaCl04SXyb5Q56mAC"))
+        };
+    });
+
 // Add MVC + Swagger
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo 
-    { 
-        Title = "Room Service API", 
-        Version = "v1" 
-    });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Room Service API", Version = "v1" });
     
-    // Handle conflicting actions
-    c.CustomSchemaIds(type => type.Name);
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "JWT Authorization header using the Bearer scheme. Enter 'Bearer' [space] and then your token in the text input below.",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference 
+                { 
+                    Type = ReferenceType.SecurityScheme, 
+                    Id = "Bearer" 
+                }
+            },
+            new string[] {}
+        }
+    });
 });
+
 
 var app = builder.Build();
 
@@ -82,6 +126,8 @@ if (app.Environment.IsDevelopment())
 
 // Use CORS
 app.UseCors("AllowFrontend");
+app.UseAuthentication();
+app.UseAuthorization();
 
 // Only use HTTPS redirection in production
 if (!app.Environment.IsDevelopment())
@@ -89,6 +135,5 @@ if (!app.Environment.IsDevelopment())
     app.UseHttpsRedirection();
 }
 
-app.UseAuthorization();
 app.MapControllers();
 app.Run();

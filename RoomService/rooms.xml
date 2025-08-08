@@ -46,9 +46,9 @@
   </RoomCardViewModel>
   <RoomCardViewModel>
     <Id>4</Id>
-    <RoomName>12</RoomName>
+    <RoomName>Superior</RoomName>
     <ImageUrl>/images/default.jpg</ImageUrl>
-    <Description>12</Description>
+    <Description>Superior room</Description>
     <Amenities>
       <string>Wi-Fi</string>
       <string>TV</string>
@@ -57,5 +57,19 @@
     <isDefault>false</isDefault>
     <Price>12.00</Price>
     <NumberOfRooms>12</NumberOfRooms>
+  </RoomCardViewModel>
+  <RoomCardViewModel>
+    <Id>5</Id>
+    <RoomName>Default</RoomName>
+    <ImageUrl>/images/default.jpg</ImageUrl>
+    <Description>Default Room</Description>
+    <Amenities>
+      <string>Wi-Fi</string>
+      <string>TV</string>
+      <string>Air Conditioning</string>
+    </Amenities>
+    <isDefault>false</isDefault>
+    <Price>100.00</Price>
+    <NumberOfRooms>5</NumberOfRooms>
   </RoomCardViewModel>
 </ArrayOfRoomCardViewModel>

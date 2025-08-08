@@ -4,6 +4,9 @@ using HotelBookingSystem.Services;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HotelBookingSystem.Controllers
 {
@@ -114,6 +117,7 @@ namespace HotelBookingSystem.Controllers
         }
 
         // POST: api/room
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult> CreateRoom([FromForm] RoomCardViewModel model, [FromForm] string[] amenities)
         {
@@ -154,6 +158,7 @@ namespace HotelBookingSystem.Controllers
         }
 
         // PUT: api/room/{id}
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateRoom(int id, [FromForm] RoomCardViewModel model, [FromForm] string[] amenities)
         {
@@ -197,6 +202,7 @@ namespace HotelBookingSystem.Controllers
         }
 
         // DELETE: api/room/{id}
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteRoom(int id)
         {

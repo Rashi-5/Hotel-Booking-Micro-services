@@ -146,6 +146,43 @@ namespace HotelBookingSystem.Services
 
             try
             {
+                // Get room information from Room Service to calculate total price
+                var selectedRoom = await _roomServiceClient.GetRoomByNameAsync(updated.RoomType);
+                if (selectedRoom == null)
+                    return false;
+
+                // Calculate total price
+                decimal pricePerRoom = decimal.TryParse(selectedRoom.Price, out var p) ? p : 0;
+                decimal totalPrice;
+
+                if (updated.BookingType == "Recurring")
+                {
+                    // For recurring bookings, calculate based on frequency and interval
+                    int numberOfDays = 1; // Default for recurring
+                    if (updated.Frequency == "Daily")
+                    {
+                        numberOfDays = (updated.CheckOut - updated.CheckIn).Days;
+                    }
+                    else if (updated.Frequency == "Weekly")
+                    {
+                        numberOfDays = updated.Days?.Count ?? 1;
+                    }
+                    else if (updated.Frequency == "Monthly")
+                    {
+                        numberOfDays = 1; // Monthly bookings are typically single day
+                    }
+                    totalPrice = pricePerRoom * updated.NumberOfRooms * numberOfDays;
+                }
+                else
+                {
+                    // For single bookings, calculate based on actual duration
+                    int numberOfDays = (updated.CheckOut - updated.CheckIn).Days;
+                    if (numberOfDays <= 0) numberOfDays = 1; // Minimum 1 day
+                    totalPrice = pricePerRoom * updated.NumberOfRooms * numberOfDays;
+                }
+
+                updated.TotalPrice = totalPrice;
+
                 var result = await _repository.UpdateBookingAsync(id, updated);
                 return result != null;
             }
