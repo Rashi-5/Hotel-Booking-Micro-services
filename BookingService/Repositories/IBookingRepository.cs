@@ -15,5 +15,6 @@ namespace HotelBookingSystem.Repositories
         Task<bool> DeleteBookingAsync(Guid id);
         Task<bool> BookingExistsAsync(Guid id);
         Task<bool> CheckAvailabilityAsync(string roomType, DateTime checkIn, DateTime checkOut, int rooms);
+        Task<(bool Success, string Message, BookingFormModel Booking)> CreateBookingWithAvailabilityCheckAsync(BookingFormModel booking, List<DateTime> bookingDates);
     }
 } 

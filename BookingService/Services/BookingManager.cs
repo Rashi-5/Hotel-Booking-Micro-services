@@ -120,8 +120,16 @@ namespace HotelBookingSystem.Services
 
             try
             {
-                var result = await _repository.AddBookingAsync(model);
-                return (true, "Booking created successfully.", result.BookingId);
+                // Use the new method that handles availability checking and booking creation in a single transaction
+                var result = await _repository.CreateBookingWithAvailabilityCheckAsync(model, bookingDates);
+                if (result.Success)
+                {
+                    return (true, result.Message, result.Booking.BookingId);
+                }
+                else
+                {
+                    return (false, result.Message, null);
+                }
             }
             catch (Exception ex)
             {

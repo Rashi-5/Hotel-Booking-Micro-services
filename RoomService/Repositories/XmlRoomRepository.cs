@@ -32,7 +32,8 @@ namespace HotelBookingSystem.Repositories
                 }
 
                 using var stream = new FileStream(_xmlFilePath, FileMode.Open, FileAccess.Read);
-                var rooms = (List<RoomCardViewModel>)await Task.Run(() => _serializer.Deserialize(stream));
+                // Remove Task.Run wrapper - this was causing potential issues
+                var rooms = (List<RoomCardViewModel>)_serializer.Deserialize(stream);
                 return rooms ?? new List<RoomCardViewModel>();
             }
             finally
@@ -58,7 +59,8 @@ namespace HotelBookingSystem.Repositories
             await _semaphore.WaitAsync();
             try
             {
-                var rooms = (await GetAllRoomsAsync()).ToList();
+                // FIXED: Don't call GetAllRoomsAsync() here as it will try to acquire the same semaphore
+                var rooms = await GetAllRoomsInternalAsync();
                 
                 // Generate new ID if not set
                 if (room.Id == 0)
@@ -67,7 +69,7 @@ namespace HotelBookingSystem.Repositories
                 }
 
                 rooms.Add(room);
-                await SaveRoomsAsync(rooms);
+                await SaveRoomsInternalAsync(rooms);
                 return room;
             }
             finally
@@ -81,7 +83,8 @@ namespace HotelBookingSystem.Repositories
             await _semaphore.WaitAsync();
             try
             {
-                var rooms = (await GetAllRoomsAsync()).ToList();
+                // FIXED: Don't call GetAllRoomsAsync() here as it will try to acquire the same semaphore
+                var rooms = await GetAllRoomsInternalAsync();
                 var existingRoom = rooms.FirstOrDefault(r => r.Id == room.Id);
                 
                 if (existingRoom != null)
@@ -94,7 +97,7 @@ namespace HotelBookingSystem.Repositories
                     existingRoom.Price = room.Price;
                     existingRoom.NumberOfRooms = room.NumberOfRooms;
                     
-                    await SaveRoomsAsync(rooms);
+                    await SaveRoomsInternalAsync(rooms);
                     return existingRoom;
                 }
                 return null;
@@ -110,13 +113,14 @@ namespace HotelBookingSystem.Repositories
             await _semaphore.WaitAsync();
             try
             {
-                var rooms = (await GetAllRoomsAsync()).ToList();
+                // FIXED: Don't call GetAllRoomsAsync() here as it will try to acquire the same semaphore
+                var rooms = await GetAllRoomsInternalAsync();
                 var room = rooms.FirstOrDefault(r => r.Id == id);
                 
                 if (room != null)
                 {
                     rooms.Remove(room);
-                    await SaveRoomsAsync(rooms);
+                    await SaveRoomsInternalAsync(rooms);
                     return true;
                 }
                 return false;
@@ -139,7 +143,21 @@ namespace HotelBookingSystem.Repositories
             return rooms.Any(r => r.RoomName == roomName);
         }
 
-        private async Task SaveRoomsAsync(List<RoomCardViewModel> rooms)
+        // ADDED: Internal method that doesn't use semaphore (assumes caller already has it)
+        private async Task<List<RoomCardViewModel>> GetAllRoomsInternalAsync()
+        {
+            if (!File.Exists(_xmlFilePath))
+            {
+                return new List<RoomCardViewModel>();
+            }
+
+            using var stream = new FileStream(_xmlFilePath, FileMode.Open, FileAccess.Read);
+            var rooms = (List<RoomCardViewModel>)_serializer.Deserialize(stream);
+            return rooms ?? new List<RoomCardViewModel>();
+        }
+
+        // ADDED: Internal save method that doesn't use Task.Run
+        private async Task SaveRoomsInternalAsync(List<RoomCardViewModel> rooms)
         {
             var directory = Path.GetDirectoryName(_xmlFilePath);
             if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
@@ -148,7 +166,14 @@ namespace HotelBookingSystem.Repositories
             }
 
             using var stream = new FileStream(_xmlFilePath, FileMode.Create, FileAccess.Write);
-            await Task.Run(() => _serializer.Serialize(stream, rooms));
+            _serializer.Serialize(stream, rooms);
+            await Task.CompletedTask; // Make it async-compatible
+        }
+
+        // Keep the original for backward compatibility
+        private async Task SaveRoomsAsync(List<RoomCardViewModel> rooms)
+        {
+            await SaveRoomsInternalAsync(rooms);
         }
     }
-} 
+}

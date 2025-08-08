@@ -115,14 +115,36 @@ namespace HotelBookingSystem.Controllers
 
         // POST: api/room
         [HttpPost]
-        public async Task<ActionResult> CreateRoom([FromBody] RoomCardViewModel model)
+        public async Task<ActionResult> CreateRoom([FromForm] RoomCardViewModel model, [FromForm] string[] amenities)
         {
             if (string.IsNullOrWhiteSpace(model.RoomName))
                 return BadRequest("Room name is required.");
 
             try
             {
-                var result = await _roomManager.AddRoomAsync(model);
+                // Handle amenities from form data
+                if (amenities != null && amenities.Length > 0)
+                {
+                    model.Amenities = amenities.ToList();
+                }
+                else if (model.Amenities == null)
+                {
+                    model.Amenities = new List<string>();
+                }
+                
+                // Convert RoomDetailsDto to RoomCardViewModel for the manager
+                var roomCardViewModel = new RoomCardViewModel
+                {
+                    RoomName = model.RoomName,
+                    ImageUrl = model.ImageUrl,
+                    Description = model.Description,
+                    Amenities = model.Amenities,
+                    isDefault = model.isDefault,
+                    Price = model.Price,
+                    NumberOfRooms = model.NumberOfRooms
+                };
+                
+                var result = await _roomManager.AddRoomAsync(roomCardViewModel);
                 return CreatedAtAction(nameof(GetRoomById), new { id = result.Id }, result);
             }
             catch (InvalidOperationException ex)
@@ -133,14 +155,35 @@ namespace HotelBookingSystem.Controllers
 
         // PUT: api/room/{id}
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateRoom(int id, [FromBody] RoomCardViewModel model)
+        public async Task<ActionResult> UpdateRoom(int id, [FromForm] RoomCardViewModel model, [FromForm] string[] amenities)
         {
-            if (id != model.Id)
-                return BadRequest("ID mismatch");
-
             try
             {
-                var result = await _roomManager.UpdateRoomAsync(model);
+                model.Id = id;
+                
+                // Handle amenities from form data
+                if (amenities != null && amenities.Length > 0)
+                {
+                    model.Amenities = amenities.ToList();
+                }
+                else if (model.Amenities == null)
+                {
+                    model.Amenities = new List<string>();
+                }
+                
+                var roomCardViewModel = new RoomCardViewModel
+                {
+                    Id = id, // Use the route parameter id
+                    RoomName = model.RoomName,
+                    ImageUrl = model.ImageUrl,
+                    Description = model.Description,
+                    Amenities = model.Amenities,
+                    isDefault = model.isDefault,
+                    Price = model.Price,
+                    NumberOfRooms = model.NumberOfRooms
+                };
+
+                var result = await _roomManager.UpdateRoomAsync(roomCardViewModel);
                 if (result == null)
                     return NotFound();
                     

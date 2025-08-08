@@ -166,5 +166,36 @@ namespace HotelBookingSystem.Repositories
                 _semaphore.Release();
             }
         }
+
+        public async Task<(bool Success, string Message, BookingFormModel Booking)> CreateBookingWithAvailabilityCheckAsync(BookingFormModel booking, List<DateTime> bookingDates)
+        {
+            await _semaphore.WaitAsync();
+            try
+            {
+                var allRooms = RoomDataHelper.GetDefaultRooms();
+                var selectedRoom = allRooms.FirstOrDefault(r => r.RoomName == booking.RoomType);
+                if (selectedRoom == null)
+                    return (false, $"Room type '{booking.RoomType}' not found.", null);
+
+                // Check availability for all booking dates in a single transaction
+                foreach (var date in bookingDates)
+                {
+                    int booked = await _context.Bookings
+                        .Where(b => b.RoomType == booking.RoomType && b.CheckIn <= date && b.CheckOut >= date)
+                        .SumAsync(b => b.NumberOfRooms);
+                    if (booked + booking.NumberOfRooms > selectedRoom.NumberOfRooms)
+                        return (false, $"Not enough rooms available for '{booking.RoomType}' on {date:yyyy-MM-dd}.", null);
+                }
+
+                // If we get here, rooms are available for all dates
+                _context.Bookings.Add(booking);
+                await _context.SaveChangesAsync();
+                return (true, "Booking created successfully.", booking);
+            }
+            finally
+            {
+                _semaphore.Release();
+            }
+        }
     }
 } 

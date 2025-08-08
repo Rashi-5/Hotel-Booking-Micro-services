@@ -35,12 +35,23 @@ namespace HotelBookingSystem.Services
             return await _repository.GetRoomByNameAsync(roomName);
         }
 
-        public async Task<RoomCardViewModel> AddRoomAsync(RoomCardViewModel room)
+         public async Task<RoomCardViewModel> AddRoomAsync(RoomCardViewModel room)
         {
-            // Validate room name uniqueness
+            // ADDED: Validate room name doesn't already exist
             if (await _repository.RoomNameExistsAsync(room.RoomName))
             {
-                throw new InvalidOperationException($"Room with name '{room.RoomName}' already exists.");
+                throw new InvalidOperationException($"A room with the name '{room.RoomName}' already exists.");
+            }
+
+            // ADDED: Basic validation
+            if (string.IsNullOrWhiteSpace(room.RoomName))
+            {
+                throw new InvalidOperationException("Room name is required.");
+            }
+
+            if (room.NumberOfRooms <= 0)
+            {
+                throw new InvalidOperationException("Number of rooms must be greater than 0.");
             }
 
             return await _repository.AddRoomAsync(room);
@@ -48,17 +59,32 @@ namespace HotelBookingSystem.Services
 
         public async Task<RoomCardViewModel> UpdateRoomAsync(RoomCardViewModel room)
         {
-            // Check if room exists
-            if (!await _repository.RoomExistsAsync(room.Id))
+            // ADDED: Check if room exists
+            var existingRoom = await _repository.GetRoomByIdAsync(room.Id);
+            if (existingRoom == null)
             {
                 throw new InvalidOperationException($"Room with ID {room.Id} not found.");
             }
 
-            // Check if new name conflicts with other rooms
-            var existingRoom = await _repository.GetRoomByIdAsync(room.Id);
-            if (existingRoom.RoomName != room.RoomName && await _repository.RoomNameExistsAsync(room.RoomName))
+            // ADDED: Check if new name conflicts with another room (if name is being changed)
+            if (existingRoom.RoomName != room.RoomName)
             {
-                throw new InvalidOperationException($"Room with name '{room.RoomName}' already exists.");
+                var roomWithSameName = await _repository.GetRoomByNameAsync(room.RoomName);
+                if (roomWithSameName != null && roomWithSameName.Id != room.Id)
+                {
+                    throw new InvalidOperationException($"A room with the name '{room.RoomName}' already exists.");
+                }
+            }
+
+            // ADDED: Basic validation
+            if (string.IsNullOrWhiteSpace(room.RoomName))
+            {
+                throw new InvalidOperationException("Room name is required.");
+            }
+
+            if (room.NumberOfRooms <= 0)
+            {
+                throw new InvalidOperationException("Number of rooms must be greater than 0.");
             }
 
             return await _repository.UpdateRoomAsync(room);

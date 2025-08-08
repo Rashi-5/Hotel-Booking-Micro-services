@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using System.Linq;
 
 namespace HotelBookingSystem.Controllers
 {
@@ -22,21 +23,47 @@ namespace HotelBookingSystem.Controllers
             _bookingManager = bookingManager;
         }
 
-        [Authorize]
         [HttpPost]
-        public async Task<IActionResult> CreateBooking([FromBody] BookingFormModel model)
+        public async Task<IActionResult> CreateBooking([FromForm] BookingFormModel model, [FromForm] string[] days, [FromForm] string[] amenities)
         {
-            // Set default amenities if not provided
-            if (model.Amenities == null || !model.Amenities.Any())
+            if (string.IsNullOrWhiteSpace(model.Username))
+                return BadRequest("Username is required.");
+
+            try
             {
-                var selectedRoom = await _bookingManager.GetRoomByNameAsync(model.RoomType);
-                model.Amenities = selectedRoom?.Amenities ?? new List<string>();
+                // Handle arrays from form data
+                if (days != null && days.Length > 0)
+                {
+                    model.Days = days.ToList();
+                }
+                else if (model.Days == null)
+                {
+                    model.Days = new List<string>();
+                }
+                
+                if (amenities != null && amenities.Length > 0)
+                {
+                    model.Amenities = amenities.ToList();
+                }
+                else if (model.Amenities == null)
+                {
+                    model.Amenities = new List<string>();
+                }
+                
+                var (success, message, bookingId) = await _bookingManager.CreateBookingAsync(model);
+                if (success)
+                {
+                    return Ok(new { message, bookingId });
+                }
+                else
+                {
+                    return BadRequest(new { message });
+                }
             }
-            
-            var result = await _bookingManager.CreateBookingAsync(model);
-            if (!result.Success)
-                return BadRequest(new { message = result.Message });
-            return Ok(new { message = result.Message, bookingId = result.BookingId });
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = $"Error creating booking: {ex.Message}" });
+            }
         }
 
         [HttpGet("availability")]
@@ -121,12 +148,38 @@ namespace HotelBookingSystem.Controllers
 
         [Authorize]
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateBooking(Guid id, [FromBody] BookingFormModel updated)
+        public async Task<IActionResult> UpdateBooking(Guid id, [FromForm] BookingFormModel updated, [FromForm] string[] days, [FromForm] string[] amenities)
         {
-            var success = await _bookingManager.UpdateBookingAsync(id, updated);
-            if (!success)
-                return NotFound();
-            return Ok(new { message = "Booking updated successfully." });
+            try
+            {
+                // Handle arrays from form data
+                if (days != null && days.Length > 0)
+                {
+                    updated.Days = days.ToList();
+                }
+                else if (updated.Days == null)
+                {
+                    updated.Days = new List<string>();
+                }
+                
+                if (amenities != null && amenities.Length > 0)
+                {
+                    updated.Amenities = amenities.ToList();
+                }
+                else if (updated.Amenities == null)
+                {
+                    updated.Amenities = new List<string>();
+                }
+                
+                var success = await _bookingManager.UpdateBookingAsync(id, updated);
+                if (!success)
+                    return NotFound();
+                return Ok(new { message = "Booking updated successfully." });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = $"Error updating booking: {ex.Message}" });
+            }
         }
 
         [HttpGet("storage-type")]

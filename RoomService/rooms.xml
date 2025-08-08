@@ -16,7 +16,7 @@
     <NumberOfRooms>5</NumberOfRooms>
   </RoomCardViewModel>
   <RoomCardViewModel>
-    <Id>0</Id>
+    <Id>1</Id>
     <RoomName>Standard Room</RoomName>
     <ImageUrl>/images/standard.jpg</ImageUrl>
     <Description>Affordable comfort for business or short stays.</Description>
@@ -30,7 +30,7 @@
     <NumberOfRooms>5</NumberOfRooms>
   </RoomCardViewModel>
   <RoomCardViewModel>
-    <Id>0</Id>
+    <Id>2</Id>
     <RoomName>Family Room</RoomName>
     <ImageUrl>/images/family.jpg</ImageUrl>
     <Description>Spacious room ideal for families with kids.</Description>
@@ -43,5 +43,17 @@
     <isDefault>true</isDefault>
     <Price>199.99</Price>
     <NumberOfRooms>5</NumberOfRooms>
+  </RoomCardViewModel>
+  <RoomCardViewModel>
+    <Id>4</Id>
+    <RoomName>12</RoomName>
+    <ImageUrl>/images/default.jpg</ImageUrl>
+    <Description>12</Description>
+    <Amenities>
+      <string>Wi-Fi</string>
+    </Amenities>
+    <isDefault>false</isDefault>
+    <Price>12.00</Price>
+    <NumberOfRooms>12</NumberOfRooms>
   </RoomCardViewModel>
 </ArrayOfRoomCardViewModel>

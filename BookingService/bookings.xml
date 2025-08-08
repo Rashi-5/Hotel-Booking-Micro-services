@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfBookingFormModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <BookingFormModel>
+    <BookingId>1124b9e5-f430-4d44-ae22-1c7f2958b261</BookingId>
+    <CustomerName>abc</CustomerName>
+    <CheckIn>2025-08-09T00:00:00</CheckIn>
+    <CheckOut>2025-08-29T00:00:00</CheckOut>
+    <Username>abc</Username>
+    <Note />
+    <NumberOfRooms>1</NumberOfRooms>
+    <TotalPrice>799.96</TotalPrice>
+    <RoomType>Family Room</RoomType>
+    <Adult>1</Adult>
+    <Children>0</Children>
+    <BookingType>Recurring</BookingType>
+    <Frequency>Weekly</Frequency>
+    <Interval>2</Interval>
+    <Days>
+      <string>Tuesday</string>
+      <string>Saturday</string>
+    </Days>
+    <Amenities>
+      <string>Two Double Beds</string>
+      <string>Wi-Fi</string>
+      <string>Play Area</string>
+      <string>Extra Sofa</string>
+    </Amenities>
+  </BookingFormModel>
+</ArrayOfBookingFormModel>

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Threading;
+using System;
 
 namespace HotelBookingSystem.Repositories
 {
@@ -62,6 +63,13 @@ namespace HotelBookingSystem.Repositories
             await _semaphore.WaitAsync();
             try
             {
+                // Check if room name already exists within the same transaction
+                var existingRoom = await _context.Rooms.FirstOrDefaultAsync(r => r.RoomName == room.RoomName);
+                if (existingRoom != null)
+                {
+                    throw new InvalidOperationException($"Room with name '{room.RoomName}' already exists.");
+                }
+
                 _context.Rooms.Add(room);
                 await _context.SaveChangesAsync();
                 return room;
@@ -78,19 +86,28 @@ namespace HotelBookingSystem.Repositories
             try
             {
                 var existingRoom = await _context.Rooms.FirstOrDefaultAsync(r => r.Id == room.Id);
-                if (existingRoom != null)
+                if (existingRoom == null)
                 {
-                    existingRoom.RoomName = room.RoomName;
-                    existingRoom.ImageUrl = room.ImageUrl;
-                    existingRoom.Description = room.Description;
-                    existingRoom.Amenities = room.Amenities;
-                    existingRoom.isDefault = room.isDefault;
-                    existingRoom.Price = room.Price;
-                    existingRoom.NumberOfRooms = room.NumberOfRooms;
-                    await _context.SaveChangesAsync();
-                    return existingRoom;
+                    throw new InvalidOperationException($"Room with ID {room.Id} not found.");
                 }
-                return null;
+
+                // Check if new name conflicts with other rooms (excluding current room)
+                var conflictingRoom = await _context.Rooms.FirstOrDefaultAsync(r => 
+                    r.Id != room.Id && r.RoomName == room.RoomName);
+                if (conflictingRoom != null)
+                {
+                    throw new InvalidOperationException($"Room with name '{room.RoomName}' already exists.");
+                }
+
+                existingRoom.RoomName = room.RoomName;
+                existingRoom.ImageUrl = room.ImageUrl;
+                existingRoom.Description = room.Description;
+                existingRoom.Amenities = room.Amenities;
+                existingRoom.isDefault = room.isDefault;
+                existingRoom.Price = room.Price;
+                existingRoom.NumberOfRooms = room.NumberOfRooms;
+                await _context.SaveChangesAsync();
+                return existingRoom;
             }
             finally
             {

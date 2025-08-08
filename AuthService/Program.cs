@@ -13,6 +13,18 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
+// Add CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("https://localhost:7111", "http://localhost:5125", "https://localhost:5125")
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
+    });
+});
+
 // Configure Swagger with JWT support
 builder.Services.AddSwaggerGen(c =>
 {
@@ -110,7 +122,10 @@ if (storageType.Equals("Database", StringComparison.OrdinalIgnoreCase))
     using (var scope = app.Services.CreateScope())
     {
         var context = scope.ServiceProvider.GetRequiredService<AuthDbContext>();
-        context.Database.EnsureCreated();
+        
+        // Ensure database is created with latest schema
+        context.Database.EnsureDeleted(); // Remove old database
+        context.Database.EnsureCreated(); // Create new database with current schema
     }
 }
 
@@ -124,11 +139,17 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-app.UseHttpsRedirection();
+// Use CORS
+app.UseCors("AllowFrontend");
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllers();
+// Only use HTTPS redirection in production
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 
+app.MapControllers();
 app.Run();
