@@ -4342,11 +4342,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/rashi/IIT/EAD/Microservice/RoomService/RoomService.csproj",
+      "projectUniqueName": "/Users/rashi/IIT/EAD/Hotel-Booking-Micro-services/RoomService/RoomService.csproj",
       "projectName": "RoomService",
-      "projectPath": "/Users/rashi/IIT/EAD/Microservice/RoomService/RoomService.csproj",
+      "projectPath": "/Users/rashi/IIT/EAD/Hotel-Booking-Micro-services/RoomService/RoomService.csproj",
       "packagesPath": "/Users/rashi/.nuget/packages/",
-      "outputPath": "/Users/rashi/IIT/EAD/Microservice/RoomService/obj/",
+      "outputPath": "/Users/rashi/IIT/EAD/Hotel-Booking-Micro-services/RoomService/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/rashi/.nuget/NuGet/NuGet.Config"

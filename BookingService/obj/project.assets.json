@@ -4308,11 +4308,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/rashi/IIT/EAD/Microservice/BookingService/BookingService.csproj",
+      "projectUniqueName": "/Users/rashi/IIT/EAD/Hotel-Booking-Micro-services/BookingService/BookingService.csproj",
       "projectName": "BookingService",
-      "projectPath": "/Users/rashi/IIT/EAD/Microservice/BookingService/BookingService.csproj",
+      "projectPath": "/Users/rashi/IIT/EAD/Hotel-Booking-Micro-services/BookingService/BookingService.csproj",
       "packagesPath": "/Users/rashi/.nuget/packages/",
-      "outputPath": "/Users/rashi/IIT/EAD/Microservice/BookingService/obj/",
+      "outputPath": "/Users/rashi/IIT/EAD/Hotel-Booking-Micro-services/BookingService/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/rashi/.nuget/NuGet/NuGet.Config"

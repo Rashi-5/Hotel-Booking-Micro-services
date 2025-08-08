@@ -8773,11 +8773,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/rashi/IIT/EAD/Microservice/AuthService/AuthService.csproj",
+      "projectUniqueName": "/Users/rashi/IIT/EAD/Hotel-Booking-Micro-services/AuthService/AuthService.csproj",
       "projectName": "AuthService",
-      "projectPath": "/Users/rashi/IIT/EAD/Microservice/AuthService/AuthService.csproj",
+      "projectPath": "/Users/rashi/IIT/EAD/Hotel-Booking-Micro-services/AuthService/AuthService.csproj",
       "packagesPath": "/Users/rashi/.nuget/packages/",
-      "outputPath": "/Users/rashi/IIT/EAD/Microservice/AuthService/obj/",
+      "outputPath": "/Users/rashi/IIT/EAD/Hotel-Booking-Micro-services/AuthService/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/rashi/.nuget/NuGet/NuGet.Config"
