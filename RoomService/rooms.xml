@@ -51,6 +51,8 @@
     <Description>12</Description>
     <Amenities>
       <string>Wi-Fi</string>
+      <string>TV</string>
+      <string>Air Conditioning</string>
     </Amenities>
     <isDefault>false</isDefault>
     <Price>12.00</Price>

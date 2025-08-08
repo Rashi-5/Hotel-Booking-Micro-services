@@ -24,30 +24,17 @@ namespace HotelBookingSystem.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateBooking([FromForm] BookingFormModel model, [FromForm] string[] days, [FromForm] string[] amenities)
+        public async Task<IActionResult> CreateBooking([FromBody] BookingFormModel model)
         {
             if (string.IsNullOrWhiteSpace(model.Username))
                 return BadRequest("Username is required.");
 
             try
             {
-                // Handle arrays from form data
-                if (days != null && days.Length > 0)
-                {
-                    model.Days = days.ToList();
-                }
-                else if (model.Days == null)
+                // Ensure arrays are not null
+                if (model.Days == null)
                 {
                     model.Days = new List<string>();
-                }
-                
-                if (amenities != null && amenities.Length > 0)
-                {
-                    model.Amenities = amenities.ToList();
-                }
-                else if (model.Amenities == null)
-                {
-                    model.Amenities = new List<string>();
                 }
                 
                 var (success, message, bookingId) = await _bookingManager.CreateBookingAsync(model);
@@ -148,27 +135,14 @@ namespace HotelBookingSystem.Controllers
 
         [Authorize]
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateBooking(Guid id, [FromForm] BookingFormModel updated, [FromForm] string[] days, [FromForm] string[] amenities)
+        public async Task<IActionResult> UpdateBooking(Guid id, [FromBody] BookingFormModel updated)
         {
             try
             {
-                // Handle arrays from form data
-                if (days != null && days.Length > 0)
-                {
-                    updated.Days = days.ToList();
-                }
-                else if (updated.Days == null)
+                // Ensure arrays are not null
+                if (updated.Days == null)
                 {
                     updated.Days = new List<string>();
-                }
-                
-                if (amenities != null && amenities.Length > 0)
-                {
-                    updated.Amenities = amenities.ToList();
-                }
-                else if (updated.Amenities == null)
-                {
-                    updated.Amenities = new List<string>();
                 }
                 
                 var success = await _bookingManager.UpdateBookingAsync(id, updated);

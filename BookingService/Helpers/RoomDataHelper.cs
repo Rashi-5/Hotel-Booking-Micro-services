@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using HotelBookingSystem.Models.Booking;
+using HotelBookingSystem.Models.Room;
 
 namespace HotelBookingSystem.Helper
 {

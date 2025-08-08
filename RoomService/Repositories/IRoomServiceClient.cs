@@ -1,17 +1,15 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using HotelBookingSystem.Models.Room;
 
 namespace HotelBookingSystem.Repositories
 {
     public interface IRoomServiceClient
     {
-        Task<IEnumerable<RoomDetailsDto>> GetAllRoomsAsync();
-        Task<RoomDetailsDto> GetRoomByIdAsync(int id);
-        Task<RoomDetailsDto> GetRoomByNameAsync(string roomName);
-        Task<RoomDetailsDto> CreateRoomAsync(RoomDetailsDto room);
-        Task<RoomDetailsDto> UpdateRoomAsync(int id, RoomDetailsDto room);
-        Task<bool> DeleteRoomAsync(int id);
-        Task<bool> RoomExistsAsync(int id);
-        Task<bool> RoomNameExistsAsync(string roomName);
+        Task<IEnumerable<RoomCardViewModel>> GetAllRoomsAsync();
+        Task<RoomCardViewModel> GetRoomByIdAsync(int id);
+        Task<RoomCardViewModel> GetRoomByNameAsync(string roomName);
+        Task<RoomCardViewModel> CreateRoomAsync(RoomCardViewModel room);
+        Task<RoomCardViewModel> UpdateRoomAsync(int id, RoomCardViewModel room);
     }
 }

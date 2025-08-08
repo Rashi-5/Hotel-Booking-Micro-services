@@ -29,7 +29,6 @@ namespace HotelBookingSystem.Models.Booking
         public string Frequency { get; set; } 
         public int? Interval { get; set; }
         public List<string> Days { get; set; }
-        // Amenities
         public List<string> Amenities { get; set; }
     }
 }

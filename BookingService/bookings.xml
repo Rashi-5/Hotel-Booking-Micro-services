@@ -26,4 +26,181 @@
       <string>Extra Sofa</string>
     </Amenities>
   </BookingFormModel>
+  <BookingFormModel>
+    <BookingId>86adac31-6793-484c-a14e-445e0c95d3f6</BookingId>
+    <CustomerName>string</CustomerName>
+    <CheckIn>2025-08-08T11:40:46.72Z</CheckIn>
+    <CheckOut>2025-08-08T11:40:46.72Z</CheckOut>
+    <Username>string</Username>
+    <Note>string</Note>
+    <NumberOfRooms>1</NumberOfRooms>
+    <TotalPrice>199.99</TotalPrice>
+    <RoomType>Family Room</RoomType>
+    <Adult>1</Adult>
+    <Children>0</Children>
+    <BookingType>string</BookingType>
+    <Frequency>string</Frequency>
+    <Interval>0</Interval>
+    <Days>
+      <string>string</string>
+    </Days>
+    <Amenities>
+      <string>string</string>
+    </Amenities>
+  </BookingFormModel>
+  <BookingFormModel>
+    <BookingId>67cb215c-8f7e-4571-ae10-ba91c65af6f2</BookingId>
+    <CustomerName>Test User</CustomerName>
+    <CheckIn>2025-01-20T00:00:00</CheckIn>
+    <CheckOut>2025-01-22T00:00:00</CheckOut>
+    <Username>testuser</Username>
+    <Note>Test booking</Note>
+    <NumberOfRooms>1</NumberOfRooms>
+    <TotalPrice>299.98</TotalPrice>
+    <RoomType>Standard Room</RoomType>
+    <Adult>2</Adult>
+    <Children>0</Children>
+    <BookingType>Single</BookingType>
+    <Frequency />
+    <Interval xsi:nil="true" />
+    <Days />
+    <Amenities>
+      <string>Queen Bed</string>
+      <string>Wi-Fi</string>
+      <string>TV</string>
+    </Amenities>
+  </BookingFormModel>
+  <BookingFormModel>
+    <BookingId>b433ff32-dd51-47e9-a42e-fd9e68d85575</BookingId>
+    <CustomerName>Test User</CustomerName>
+    <CheckIn>2025-01-20T00:00:00</CheckIn>
+    <CheckOut>2025-01-22T00:00:00</CheckOut>
+    <Username>testuser</Username>
+    <Note>Test booking</Note>
+    <NumberOfRooms>1</NumberOfRooms>
+    <TotalPrice>299.98</TotalPrice>
+    <RoomType>Standard Room</RoomType>
+    <Adult>2</Adult>
+    <Children>0</Children>
+    <BookingType>Single</BookingType>
+    <Frequency />
+    <Interval xsi:nil="true" />
+    <Days />
+    <Amenities>
+      <string>Queen Bed</string>
+      <string>Wi-Fi</string>
+      <string>TV</string>
+    </Amenities>
+  </BookingFormModel>
+  <BookingFormModel>
+    <BookingId>64159162-b345-4746-8216-263336fd0733</BookingId>
+    <CustomerName>string</CustomerName>
+    <CheckIn>2025-08-08T11:40:46.72Z</CheckIn>
+    <CheckOut>2025-08-08T11:40:46.72Z</CheckOut>
+    <Username>string</Username>
+    <Note>string</Note>
+    <NumberOfRooms>1</NumberOfRooms>
+    <TotalPrice>199.99</TotalPrice>
+    <RoomType>Family Room</RoomType>
+    <Adult>1</Adult>
+    <Children>0</Children>
+    <BookingType>string</BookingType>
+    <Frequency>string</Frequency>
+    <Interval>0</Interval>
+    <Days>
+      <string>string</string>
+    </Days>
+    <Amenities>
+      <string>string</string>
+    </Amenities>
+  </BookingFormModel>
+  <BookingFormModel>
+    <BookingId>f00134c9-602e-4db2-a4d0-c0691cbd6a7c</BookingId>
+    <CustomerName>string</CustomerName>
+    <CheckIn>2025-08-08T11:40:46.72Z</CheckIn>
+    <CheckOut>2025-08-08T11:40:46.72Z</CheckOut>
+    <Username>string</Username>
+    <Note>string</Note>
+    <NumberOfRooms>1</NumberOfRooms>
+    <TotalPrice>199.99</TotalPrice>
+    <RoomType>Family Room</RoomType>
+    <Adult>1</Adult>
+    <Children>0</Children>
+    <BookingType>string</BookingType>
+    <Frequency>string</Frequency>
+    <Interval>0</Interval>
+    <Days>
+      <string>string</string>
+    </Days>
+    <Amenities>
+      <string>string</string>
+    </Amenities>
+  </BookingFormModel>
+  <BookingFormModel>
+    <BookingId>ed95fa35-8cd2-442a-b9a7-8620a567a307</BookingId>
+    <CustomerName>user1</CustomerName>
+    <CheckIn>2025-08-09T00:00:00</CheckIn>
+    <CheckOut>2025-08-19T00:00:00</CheckOut>
+    <Username>user1</Username>
+    <Note>note</Note>
+    <NumberOfRooms>1</NumberOfRooms>
+    <TotalPrice>0</TotalPrice>
+    <RoomType>Standard Room</RoomType>
+    <Adult>1</Adult>
+    <Children>0</Children>
+    <BookingType>onetime</BookingType>
+    <Frequency>0</Frequency>
+    <Interval>1</Interval>
+    <Days>
+      <string xsi:nil="true" />
+    </Days>
+    <Amenities>
+      <string xsi:nil="true" />
+    </Amenities>
+  </BookingFormModel>
+  <BookingFormModel>
+    <BookingId>66d16780-ed36-48cd-b13a-11d96e7e6e39</BookingId>
+    <CustomerName>user1</CustomerName>
+    <CheckIn>2025-08-09T00:00:00</CheckIn>
+    <CheckOut>2025-08-22T00:00:00</CheckOut>
+    <Username>user1</Username>
+    <Note>No special requests</Note>
+    <NumberOfRooms>1</NumberOfRooms>
+    <TotalPrice>0</TotalPrice>
+    <RoomType>Standard Room</RoomType>
+    <Adult>1</Adult>
+    <Children>0</Children>
+    <BookingType>OneTime</BookingType>
+    <Frequency>0</Frequency>
+    <Interval>1</Interval>
+    <Days />
+    <Amenities>
+      <string>Wi-Fi</string>
+      <string>TV</string>
+      <string>Air Conditioning</string>
+    </Amenities>
+  </BookingFormModel>
+  <BookingFormModel>
+    <BookingId>70f9c4f9-4621-4171-b04e-d6044c09c67b</BookingId>
+    <CustomerName>user1</CustomerName>
+    <CheckIn>2025-08-10T00:00:00</CheckIn>
+    <CheckOut>2025-08-29T00:00:00</CheckOut>
+    <Username>user1</Username>
+    <Note />
+    <NumberOfRooms>1</NumberOfRooms>
+    <TotalPrice>3799.81</TotalPrice>
+    <RoomType>Family Room</RoomType>
+    <Adult>1</Adult>
+    <Children>0</Children>
+    <BookingType>OneTime</BookingType>
+    <Frequency>0</Frequency>
+    <Interval>1</Interval>
+    <Days />
+    <Amenities>
+      <string>Two Double Beds</string>
+      <string>Wi-Fi</string>
+      <string>Play Area</string>
+      <string>Extra Sofa</string>
+    </Amenities>
+  </BookingFormModel>
 </ArrayOfBookingFormModel>

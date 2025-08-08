@@ -4,28 +4,17 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using HotelBookingSystem.Models.Room;
 
 namespace HotelBookingSystem.Repositories
 {
-    public class RoomDetailsDto
-    {
-        public int Id { get; set; }
-        public string RoomName { get; set; }
-        public string ImageUrl { get; set; }
-        public string Description { get; set; }
-        public List<string> Amenities { get; set; }
-        public bool isDefault { get; set; }
-        public string Price { get; set; }
-        public int NumberOfRooms { get; set; }
-    }
-
     public class RoomServiceClient : IRoomServiceClient
     {
         private readonly HttpClient _httpClient;
-        private readonly string _baseUrl;
         private readonly JsonSerializerOptions _jsonOptions;
+        private readonly string _baseUrl;
 
-        public RoomServiceClient(HttpClient httpClient, string baseUrl = "https://localhost:5238")
+        public RoomServiceClient(HttpClient httpClient, string baseUrl)
         {
             _httpClient = httpClient;
             _baseUrl = baseUrl;
@@ -35,7 +24,7 @@ namespace HotelBookingSystem.Repositories
             };
         }
 
-        public async Task<IEnumerable<RoomDetailsDto>> GetAllRoomsAsync()
+        public async Task<IEnumerable<RoomCardViewModel>> GetAllRoomsAsync()
         {
             try
             {
@@ -43,7 +32,7 @@ namespace HotelBookingSystem.Repositories
                 response.EnsureSuccessStatusCode();
                 
                 var content = await response.Content.ReadAsStringAsync();
-                return JsonSerializer.Deserialize<IEnumerable<RoomDetailsDto>>(content, _jsonOptions) ?? new List<RoomDetailsDto>();
+                return JsonSerializer.Deserialize<IEnumerable<RoomCardViewModel>>(content, _jsonOptions) ?? new List<RoomCardViewModel>();
             }
             catch (HttpRequestException ex)
             {
@@ -51,7 +40,7 @@ namespace HotelBookingSystem.Repositories
             }
         }
 
-        public async Task<RoomDetailsDto> GetRoomByIdAsync(int id)
+        public async Task<RoomCardViewModel> GetRoomByIdAsync(int id)
         {
             try
             {
@@ -61,7 +50,7 @@ namespace HotelBookingSystem.Repositories
                 
                 response.EnsureSuccessStatusCode();
                 var content = await response.Content.ReadAsStringAsync();
-                return JsonSerializer.Deserialize<RoomDetailsDto>(content, _jsonOptions);
+                return JsonSerializer.Deserialize<RoomCardViewModel>(content, _jsonOptions);
             }
             catch (HttpRequestException ex)
             {
@@ -69,17 +58,17 @@ namespace HotelBookingSystem.Repositories
             }
         }
 
-        public async Task<RoomDetailsDto> GetRoomByNameAsync(string roomName)
+        public async Task<RoomCardViewModel> GetRoomByNameAsync(string roomName)
         {
             try
             {
-                var response = await _httpClient.GetAsync($"{_baseUrl}/api/room?roomName={Uri.EscapeDataString(roomName)}");
+                var response = await _httpClient.GetAsync($"{_baseUrl}/api/room/search?roomName={Uri.EscapeDataString(roomName)}");
                 if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
                     return null;
                 
                 response.EnsureSuccessStatusCode();
                 var content = await response.Content.ReadAsStringAsync();
-                return JsonSerializer.Deserialize<RoomDetailsDto>(content, _jsonOptions);
+                return JsonSerializer.Deserialize<RoomCardViewModel>(content, _jsonOptions);
             }
             catch (HttpRequestException ex)
             {
@@ -87,7 +76,7 @@ namespace HotelBookingSystem.Repositories
             }
         }
 
-        public async Task<RoomDetailsDto> CreateRoomAsync(RoomDetailsDto room)
+        public async Task<RoomCardViewModel> CreateRoomAsync(RoomCardViewModel room)
         {
             try
             {
@@ -98,7 +87,7 @@ namespace HotelBookingSystem.Repositories
                 response.EnsureSuccessStatusCode();
                 
                 var responseContent = await response.Content.ReadAsStringAsync();
-                return JsonSerializer.Deserialize<RoomDetailsDto>(responseContent, _jsonOptions);
+                return JsonSerializer.Deserialize<RoomCardViewModel>(responseContent, _jsonOptions);
             }
             catch (HttpRequestException ex)
             {
@@ -106,7 +95,7 @@ namespace HotelBookingSystem.Repositories
             }
         }
 
-        public async Task<RoomDetailsDto> UpdateRoomAsync(int id, RoomDetailsDto room)
+        public async Task<RoomCardViewModel> UpdateRoomAsync(int id, RoomCardViewModel room)
         {
             try
             {
@@ -119,7 +108,7 @@ namespace HotelBookingSystem.Repositories
                 
                 response.EnsureSuccessStatusCode();
                 var responseContent = await response.Content.ReadAsStringAsync();
-                return JsonSerializer.Deserialize<RoomDetailsDto>(responseContent, _jsonOptions);
+                return JsonSerializer.Deserialize<RoomCardViewModel>(responseContent, _jsonOptions);
             }
             catch (HttpRequestException ex)
             {
@@ -157,7 +146,7 @@ namespace HotelBookingSystem.Repositories
         {
             try
             {
-                var response = await _httpClient.GetAsync($"{_baseUrl}/api/room?roomName={Uri.EscapeDataString(roomName)}");
+                var response = await _httpClient.GetAsync($"{_baseUrl}/api/room/search?roomName={Uri.EscapeDataString(roomName)}");
                 return response.IsSuccessStatusCode;
             }
             catch (HttpRequestException)

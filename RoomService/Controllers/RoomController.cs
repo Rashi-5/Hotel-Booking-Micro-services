@@ -132,7 +132,7 @@ namespace HotelBookingSystem.Controllers
                     model.Amenities = new List<string>();
                 }
                 
-                // Convert RoomDetailsDto to RoomCardViewModel for the manager
+                // Create RoomCardViewModel for the manager
                 var roomCardViewModel = new RoomCardViewModel
                 {
                     RoomName = model.RoomName,
@@ -171,6 +171,7 @@ namespace HotelBookingSystem.Controllers
                     model.Amenities = new List<string>();
                 }
                 
+                // Create RoomCardViewModel for the manager
                 var roomCardViewModel = new RoomCardViewModel
                 {
                     Id = id, // Use the route parameter id
@@ -187,7 +188,7 @@ namespace HotelBookingSystem.Controllers
                 if (result == null)
                     return NotFound();
                     
-                return NoContent();
+                return Ok(result);
             }
             catch (InvalidOperationException ex)
             {
@@ -205,7 +206,7 @@ namespace HotelBookingSystem.Controllers
                 if (!success)
                     return NotFound();
                     
-                return NoContent();
+                return Ok(new { message = "Room deleted successfully" });
             }
             catch (InvalidOperationException ex)
             {

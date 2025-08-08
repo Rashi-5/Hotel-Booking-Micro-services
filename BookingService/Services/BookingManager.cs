@@ -1,4 +1,5 @@
 using HotelBookingSystem.Models.Booking;
+using HotelBookingSystem.Models.Room;
 using HotelBookingSystem.Repositories;
 using HotelBookingSystem.Helper;
 using System;
@@ -170,12 +171,12 @@ namespace HotelBookingSystem.Services
             return await _repository.CheckAvailabilityAsync(roomType, checkIn, checkOut, rooms);
         }
 
-        public async Task<IEnumerable<RoomDetailsDto>> GetAllRoomsAsync()
+        public async Task<IEnumerable<RoomCardViewModel>> GetAllRoomsAsync()
         {
             return await _roomServiceClient.GetAllRoomsAsync();
         }
 
-        public async Task<RoomDetailsDto> GetRoomByNameAsync(string roomName)
+        public async Task<RoomCardViewModel> GetRoomByNameAsync(string roomName)
         {
             return await _roomServiceClient.GetRoomByNameAsync(roomName);
         }

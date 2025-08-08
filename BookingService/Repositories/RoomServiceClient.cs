@@ -1,37 +1,35 @@
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using HotelBookingSystem.Models.Room;
 
 namespace HotelBookingSystem.Repositories
 {
     public class RoomServiceClient : IRoomServiceClient
     {
         private readonly HttpClient _httpClient;
-        private readonly string _baseUrl;
         private readonly JsonSerializerOptions _jsonOptions;
 
-        public RoomServiceClient(HttpClient httpClient, string baseUrl = "http://localhost:5238")
+        public RoomServiceClient(HttpClient httpClient)
         {
             _httpClient = httpClient;
-            _baseUrl = baseUrl;
             _jsonOptions = new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
             };
         }
 
-        public async Task<IEnumerable<RoomDetailsDto>> GetAllRoomsAsync()
+        public async Task<IEnumerable<RoomCardViewModel>> GetAllRoomsAsync()
         {
             try
             {
-                var response = await _httpClient.GetAsync($"{_baseUrl}/api/room");
+                var response = await _httpClient.GetAsync("/api/Room");
                 response.EnsureSuccessStatusCode();
                 
                 var content = await response.Content.ReadAsStringAsync();
-                return JsonSerializer.Deserialize<IEnumerable<RoomDetailsDto>>(content, _jsonOptions) ?? new List<RoomDetailsDto>();
+                return JsonSerializer.Deserialize<IEnumerable<RoomCardViewModel>>(content, _jsonOptions) ?? new List<RoomCardViewModel>();
             }
             catch (HttpRequestException ex)
             {
@@ -39,17 +37,17 @@ namespace HotelBookingSystem.Repositories
             }
         }
 
-        public async Task<RoomDetailsDto> GetRoomByIdAsync(int id)
+        public async Task<RoomCardViewModel> GetRoomByIdAsync(int id)
         {
             try
             {
-                var response = await _httpClient.GetAsync($"{_baseUrl}/api/room/{id}");
+                var response = await _httpClient.GetAsync($"/api/Room/{id}");
                 if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
                     return null;
                 
                 response.EnsureSuccessStatusCode();
                 var content = await response.Content.ReadAsStringAsync();
-                return JsonSerializer.Deserialize<RoomDetailsDto>(content, _jsonOptions);
+                return JsonSerializer.Deserialize<RoomCardViewModel>(content, _jsonOptions);
             }
             catch (HttpRequestException ex)
             {
@@ -57,17 +55,17 @@ namespace HotelBookingSystem.Repositories
             }
         }
 
-        public async Task<RoomDetailsDto> GetRoomByNameAsync(string roomName)
+        public async Task<RoomCardViewModel> GetRoomByNameAsync(string roomName)
         {
             try
             {
-                var response = await _httpClient.GetAsync($"{_baseUrl}/api/room/search?roomName={Uri.EscapeDataString(roomName)}");
+                var response = await _httpClient.GetAsync($"/api/Room/search?roomName={Uri.EscapeDataString(roomName)}");
                 if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
                     return null;
                 
                 response.EnsureSuccessStatusCode();
                 var content = await response.Content.ReadAsStringAsync();
-                return JsonSerializer.Deserialize<RoomDetailsDto>(content, _jsonOptions);
+                return JsonSerializer.Deserialize<RoomCardViewModel>(content, _jsonOptions);
             }
             catch (HttpRequestException ex)
             {
@@ -80,7 +78,7 @@ namespace HotelBookingSystem.Repositories
             try
             {
                 var queryString = $"?roomName={Uri.EscapeDataString(roomName)}&checkIn={checkIn:yyyy-MM-dd}&checkOut={checkOut:yyyy-MM-dd}&numberOfRooms={numberOfRooms}";
-                var response = await _httpClient.GetAsync($"{_baseUrl}/api/room/availability{queryString}");
+                var response = await _httpClient.GetAsync($"/api/Room/availability{queryString}");
                 
                 if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
                     return false;

@@ -1,4 +1,4 @@
-namespace HotelBookingSystem.Models.Booking
+namespace HotelBookingSystem.Models.Room
 {
     public class RoomCardViewModel
     {
