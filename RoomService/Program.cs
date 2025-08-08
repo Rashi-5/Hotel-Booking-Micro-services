@@ -101,21 +101,46 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
-// Auto-seed default rooms only if using DB and table is empty
-if (storageType.Equals("Database", StringComparison.OrdinalIgnoreCase))
+// Debug: Always run database initialization
+Console.WriteLine("=== DATABASE INITIALIZATION START ===");
+Console.WriteLine($"Storage type from config: {storageType}");
+
+using (var scope = app.Services.CreateScope())
 {
-    using (var scope = app.Services.CreateScope())
+    var context = scope.ServiceProvider.GetRequiredService<RoomDbContext>();
+    
+    Console.WriteLine("DbContext created successfully");
+    
+    // Force database creation with current schema
+    Console.WriteLine("Creating database with current schema...");
+    var created = context.Database.EnsureCreated();
+    Console.WriteLine($"Database created: {created}");
+    
+    // Check if rooms table is empty and seed default rooms
+    try
     {
-        var context = scope.ServiceProvider.GetRequiredService<RoomDbContext>();
+        var roomCount = await context.Rooms.CountAsync();
+        Console.WriteLine($"Current room count: {roomCount}");
         
-        // Ensure database is created with latest schema
-        context.Database.EnsureDeleted(); // Remove old database
-        context.Database.EnsureCreated(); // Create new database with current schema
-        
-        // Seed default rooms
-        await RoomSeedHelper.SeedDefaultRoomsAsync(context);
+        if (roomCount == 0)
+        {
+            Console.WriteLine("Seeding default rooms...");
+            await RoomSeedHelper.SeedDefaultRoomsAsync(context);
+            Console.WriteLine("Default rooms seeded successfully!");
+        }
+        else
+        {
+            Console.WriteLine($"Database already has {roomCount} rooms, skipping seeding.");
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Error during seeding: {ex.Message}");
+        Console.WriteLine($"Stack trace: {ex.StackTrace}");
     }
 }
+
+Console.WriteLine("=== DATABASE INITIALIZATION END ===");
 
 // Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
