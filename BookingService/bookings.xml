@@ -183,4 +183,49 @@
       <string>Air Conditioning</string>
     </Amenities>
   </BookingFormModel>
+  <BookingFormModel>
+    <BookingId>f8f6223c-847a-46f1-a6a8-9e77bbb227bf</BookingId>
+    <CustomerName>user1</CustomerName>
+    <CheckIn>2025-08-09T00:00:00</CheckIn>
+    <CheckOut>2025-08-29T00:00:00</CheckOut>
+    <Username>user1</Username>
+    <Note>no</Note>
+    <NumberOfRooms>2</NumberOfRooms>
+    <TotalPrice>7999.60</TotalPrice>
+    <RoomType>Family Room</RoomType>
+    <Adult>1</Adult>
+    <Children>1</Children>
+    <BookingType>OneTime</BookingType>
+    <Frequency>0</Frequency>
+    <Interval>1</Interval>
+    <Days />
+    <Amenities>
+      <string>Two Double Beds</string>
+      <string>Wi-Fi</string>
+      <string>Play Area</string>
+      <string>Extra Sofa</string>
+    </Amenities>
+  </BookingFormModel>
+  <BookingFormModel>
+    <BookingId>d0547caa-ac11-4e63-8284-44e3337c9bcf</BookingId>
+    <CustomerName>user1</CustomerName>
+    <CheckIn>2025-09-06T00:00:00</CheckIn>
+    <CheckOut>2025-09-07T00:00:00</CheckOut>
+    <Username>user1</Username>
+    <Note />
+    <NumberOfRooms>1</NumberOfRooms>
+    <TotalPrice>149.99</TotalPrice>
+    <RoomType>Standard Room</RoomType>
+    <Adult>1</Adult>
+    <Children>0</Children>
+    <BookingType>OneTime</BookingType>
+    <Frequency>0</Frequency>
+    <Interval>1</Interval>
+    <Days />
+    <Amenities>
+      <string>Queen Bed</string>
+      <string>Wi-Fi</string>
+      <string>TV</string>
+    </Amenities>
+  </BookingFormModel>
 </ArrayOfBookingFormModel>

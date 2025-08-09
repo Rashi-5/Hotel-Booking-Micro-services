@@ -80,6 +80,8 @@ namespace HotelBookingSystem.Controllers
             });
         }
 
+
+
         // GET: api/room/availability?roomName={roomName}&checkIn={checkIn}&checkOut={checkOut}&numberOfRooms={numberOfRooms}
         [HttpGet("availability")]
         public async Task<ActionResult<object>> CheckAvailability(
@@ -102,8 +104,6 @@ namespace HotelBookingSystem.Controllers
                     message = $"Not enough rooms available. Only {room.NumberOfRooms} rooms available for '{roomName}'." 
                 });
 
-            // For now, we'll do a simple check based on total room count
-            // In a real scenario, you'd want to check existing bookings for the room type and date range
             bool isAvailable = room.NumberOfRooms >= numberOfRooms;
             
             return Ok(new { 
@@ -179,7 +179,7 @@ namespace HotelBookingSystem.Controllers
                 // Create RoomCardViewModel for the manager
                 var roomCardViewModel = new RoomCardViewModel
                 {
-                    Id = id, // Use the route parameter id
+                    Id = id,
                     RoomName = model.RoomName,
                     ImageUrl = model.ImageUrl,
                     Description = model.Description,

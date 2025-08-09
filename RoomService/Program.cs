@@ -101,46 +101,37 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
-// Debug: Always run database initialization
-Console.WriteLine("=== DATABASE INITIALIZATION START ===");
-Console.WriteLine($"Storage type from config: {storageType}");
-
-using (var scope = app.Services.CreateScope())
+// Database initialization only for Database storage type
+if (storageType.Equals("Database", StringComparison.OrdinalIgnoreCase))
 {
-    var context = scope.ServiceProvider.GetRequiredService<RoomDbContext>();
-    
-    Console.WriteLine("DbContext created successfully");
-    
-    // Force database creation with current schema
-    Console.WriteLine("Creating database with current schema...");
-    var created = context.Database.EnsureCreated();
-    Console.WriteLine($"Database created: {created}");
-    
-    // Check if rooms table is empty and seed default rooms
-    try
+    Console.WriteLine("=== DATABASE INITIALIZATION START ===");
+    Console.WriteLine($"Storage type from config: {storageType}");
+
+    using (var scope = app.Services.CreateScope())
     {
-        var roomCount = await context.Rooms.CountAsync();
-        Console.WriteLine($"Current room count: {roomCount}");
+        var context = scope.ServiceProvider.GetRequiredService<RoomDbContext>();
+                
+        // Force database creation with current schema
+        var created = context.Database.EnsureCreated();
         
-        if (roomCount == 0)
+        // Check if rooms table is empty and seed default rooms
+        try
         {
-            Console.WriteLine("Seeding default rooms...");
-            await RoomSeedHelper.SeedDefaultRoomsAsync(context);
-            Console.WriteLine("Default rooms seeded successfully!");
+            var roomCount = await context.Rooms.CountAsync();
+            Console.WriteLine($"Current room count: {roomCount}");
+            
+            if (roomCount == 0)
+            {
+                Console.WriteLine("Seeding default rooms...");
+                await RoomSeedHelper.SeedDefaultRoomsAsync(context);
+            }
         }
-        else
+        catch (Exception ex)
         {
-            Console.WriteLine($"Database already has {roomCount} rooms, skipping seeding.");
+            Console.WriteLine($"Error during seeding: {ex.Message}");
         }
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"Error during seeding: {ex.Message}");
-        Console.WriteLine($"Stack trace: {ex.StackTrace}");
     }
 }
-
-Console.WriteLine("=== DATABASE INITIALIZATION END ===");
 
 // Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())

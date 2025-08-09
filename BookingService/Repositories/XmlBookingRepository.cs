@@ -61,7 +61,6 @@ namespace HotelBookingSystem.Repositories
             await _semaphore.WaitAsync();
             try
             {
-                // FIXED: Don't call GetAllBookingsAsync() here as it will try to acquire the same semaphore
                 var bookings = await GetAllBookingsInternalAsync();
                 
                 // Generate new ID if not set
@@ -85,7 +84,6 @@ namespace HotelBookingSystem.Repositories
             await _semaphore.WaitAsync();
             try
             {
-                // FIXED: Don't call GetAllBookingsAsync() here as it will try to acquire the same semaphore
                 var bookings = await GetAllBookingsInternalAsync();
                 var existingBooking = bookings.FirstOrDefault(b => b.BookingId == id);
                 
@@ -123,7 +121,6 @@ namespace HotelBookingSystem.Repositories
             await _semaphore.WaitAsync();
             try
             {
-                // FIXED: Don't call GetAllBookingsAsync() here as it will try to acquire the same semaphore
                 var bookings = await GetAllBookingsInternalAsync();
                 var booking = bookings.FirstOrDefault(b => b.BookingId == id);
                 
@@ -176,7 +173,6 @@ namespace HotelBookingSystem.Repositories
                 if (selectedRoom == null)
                     return (false, $"Room type '{booking.RoomType}' not found.", null);
 
-                // FIXED: Don't call GetAllBookingsAsync() here as it will try to acquire the same semaphore
                 var bookings = await GetAllBookingsInternalAsync();
                 
                 // Check availability for all booking dates in a single transaction
@@ -208,7 +204,6 @@ namespace HotelBookingSystem.Repositories
             }
         }
 
-        // ADDED: Internal method that doesn't use semaphore (assumes caller already has it)
         private async Task<List<BookingFormModel>> GetAllBookingsInternalAsync()
         {
             if (!File.Exists(_xmlFilePath))
@@ -221,7 +216,6 @@ namespace HotelBookingSystem.Repositories
             return bookings ?? new List<BookingFormModel>();
         }
 
-        // ADDED: Internal save method that doesn't use Task.Run
         private async Task SaveBookingsInternalAsync(List<BookingFormModel> bookings)
         {
             var directory = Path.GetDirectoryName(_xmlFilePath);
@@ -232,10 +226,9 @@ namespace HotelBookingSystem.Repositories
 
             using var stream = new FileStream(_xmlFilePath, FileMode.Create, FileAccess.Write);
             _serializer.Serialize(stream, bookings);
-            await Task.CompletedTask; // Make it async-compatible
+            await Task.CompletedTask; 
         }
 
-        // Keep the original for backward compatibility (though it should use the internal version now)
         private async Task SaveBookingsAsync(List<BookingFormModel> bookings)
         {
             await SaveBookingsInternalAsync(bookings);

@@ -61,7 +61,6 @@ var secretKey = Environment.GetEnvironmentVariable("JWT_SECRET")
     ?? builder.Configuration["Jwt:Secret"] 
     ?? "5V8wVD4WNUsVQqNyaCl04SXyb5Q56mAC";
 
-// Configure storage type (similar to your room service pattern)
 var storageType = builder.Configuration["Storage:Type"] ?? "Database";
 
 if (storageType.Equals("XML", StringComparison.OrdinalIgnoreCase))
@@ -122,10 +121,7 @@ if (storageType.Equals("Database", StringComparison.OrdinalIgnoreCase))
     using (var scope = app.Services.CreateScope())
     {
         var context = scope.ServiceProvider.GetRequiredService<AuthDbContext>();
-        
-        // Ensure database is created with latest schema
-        context.Database.EnsureDeleted(); // Remove old database
-        context.Database.EnsureCreated(); // Create new database with current schema
+        var created = context.Database.EnsureCreated();
     }
 }
 
@@ -145,7 +141,6 @@ app.UseCors("AllowFrontend");
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Only use HTTPS redirection in production
 if (!app.Environment.IsDevelopment())
 {
     app.UseHttpsRedirection();

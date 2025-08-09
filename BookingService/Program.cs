@@ -36,7 +36,6 @@ if (storageType.Equals("XML", StringComparison.OrdinalIgnoreCase))
 }
 else
 {
-    // Database storage (default)
     builder.Services.AddDbContext<BookingDbContext>(options =>
         options.UseSqlite("Data Source=booking.db"));
     builder.Services.AddScoped<IBookingRepository, DatabaseBookingRepository>();
@@ -114,9 +113,20 @@ if (storageType.Equals("Database", StringComparison.OrdinalIgnoreCase))
     {
         var context = scope.ServiceProvider.GetRequiredService<BookingDbContext>();
         
-        // Ensure database is created with latest schema
-        context.Database.EnsureDeleted(); // Remove old database
-        context.Database.EnsureCreated(); // Create new database with current schema
+        try
+        {
+            // Only create database if it doesn't exist
+            var created = context.Database.EnsureCreated();
+            Console.WriteLine($"Booking database created: {created}");
+            
+            // Check current booking count
+            var bookingCount = await context.Bookings.CountAsync();
+            Console.WriteLine($"Current booking count: {bookingCount}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Database initialization error: {ex.Message}");
+        }
     }
 }
 
@@ -133,7 +143,6 @@ app.UseCors("AllowFrontend");
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Only use HTTPS redirection in production
 if (!app.Environment.IsDevelopment())
 {
     app.UseHttpsRedirection();

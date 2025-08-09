@@ -112,7 +112,7 @@ namespace HotelBookingSystem.Services
             {
                 // For single bookings, calculate based on actual duration
                 int numberOfDays = (model.CheckOut - model.CheckIn).Days;
-                if (numberOfDays <= 0) numberOfDays = 1; // Minimum 1 day
+                if (numberOfDays <= 0) numberOfDays = 1;
                 totalPrice = pricePerRoom * model.NumberOfRooms * numberOfDays;
             }
 
@@ -121,7 +121,7 @@ namespace HotelBookingSystem.Services
 
             try
             {
-                // Use the new method that handles availability checking and booking creation in a single transaction
+                // handles availability checking and booking creation in a single transaction
                 var result = await _repository.CreateBookingWithAvailabilityCheckAsync(model, bookingDates);
                 if (result.Success)
                 {
@@ -158,7 +158,7 @@ namespace HotelBookingSystem.Services
                 if (updated.BookingType == "Recurring")
                 {
                     // For recurring bookings, calculate based on frequency and interval
-                    int numberOfDays = 1; // Default for recurring
+                    int numberOfDays = 1;
                     if (updated.Frequency == "Daily")
                     {
                         numberOfDays = (updated.CheckOut - updated.CheckIn).Days;
@@ -169,7 +169,7 @@ namespace HotelBookingSystem.Services
                     }
                     else if (updated.Frequency == "Monthly")
                     {
-                        numberOfDays = 1; // Monthly bookings are typically single day
+                        numberOfDays = 1;
                     }
                     totalPrice = pricePerRoom * updated.NumberOfRooms * numberOfDays;
                 }
@@ -177,7 +177,7 @@ namespace HotelBookingSystem.Services
                 {
                     // For single bookings, calculate based on actual duration
                     int numberOfDays = (updated.CheckOut - updated.CheckIn).Days;
-                    if (numberOfDays <= 0) numberOfDays = 1; // Minimum 1 day
+                    if (numberOfDays <= 0) numberOfDays = 1;
                     totalPrice = pricePerRoom * updated.NumberOfRooms * numberOfDays;
                 }
 
@@ -199,12 +199,10 @@ namespace HotelBookingSystem.Services
 
         public async Task<bool> CheckAvailabilityAsync(string roomType, DateTime checkIn, DateTime checkOut, int rooms)
         {
-            // First check with Room Service
             bool roomServiceAvailable = await _roomServiceClient.CheckRoomAvailabilityAsync(roomType, checkIn, checkOut, rooms);
             if (!roomServiceAvailable)
                 return false;
 
-            // Then check with local repository for existing bookings
             return await _repository.CheckAvailabilityAsync(roomType, checkIn, checkOut, rooms);
         }
 

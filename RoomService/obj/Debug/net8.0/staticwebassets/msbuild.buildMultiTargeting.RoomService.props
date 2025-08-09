@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="../build/RoomService.props" />
-</Project>

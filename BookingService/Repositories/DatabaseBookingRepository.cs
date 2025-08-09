@@ -187,7 +187,6 @@ namespace HotelBookingSystem.Repositories
                         return (false, $"Not enough rooms available for '{booking.RoomType}' on {date:yyyy-MM-dd}.", null);
                 }
 
-                // If we get here, rooms are available for all dates
                 _context.Bookings.Add(booking);
                 await _context.SaveChangesAsync();
                 return (true, "Booking created successfully.", booking);

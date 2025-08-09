@@ -37,7 +37,7 @@ namespace HotelBookingSystem.Controllers
             // Generate JWT token
             var token = _jwtService.GenerateToken(user.Username, user.Role);
 
-            // Add cookie-based authentication if needed
+            // Add cookie-based authentication
             if (HttpContext.Request.Headers.ContainsKey("X-Use-Cookies"))
             {
                 var claims = new List<Claim>
@@ -97,7 +97,7 @@ namespace HotelBookingSystem.Controllers
             if (_userStore.UserExists(request.Username))
                 return Conflict(new { message = "Username already exists" });
 
-            // Create new user with "User" role by default
+            // Create new user with
             var newUser = new User
             {
                 Username = request.Username,

@@ -77,26 +77,6 @@ namespace HotelBookingSystem.Controllers
             return Ok(new { roomType, amenities = selectedRoom.Amenities });
         }
 
-        [HttpGet("test")]
-        public IActionResult TestEndpoint()
-        {
-            return Ok(new { 
-                message = "BookingService API is working!",
-                availableEndpoints = new[] {
-                    "POST /api/booking - Create a new booking",
-                    "GET /api/booking/availability - Check room availability",
-                    "GET /api/booking/rooms - Get all rooms",
-                    "GET /api/booking/rooms/{roomType}/amenities - Get room amenities",
-                    "GET /api/booking/user/{username} - Get user bookings",
-                    "GET /api/booking/all - Get all bookings",
-                    "GET /api/booking/{id} - Get booking by ID",
-                    "PUT /api/booking/{id} - Update booking",
-                    "DELETE /api/booking/{id} - Delete booking",
-                    "GET /api/booking/storage-type - Get storage type"
-                }
-            });
-        }
-
         [Authorize]
         [HttpGet("user/{username}")]
         public async Task<IActionResult> GetBookingsForUser(string username)
@@ -105,9 +85,17 @@ namespace HotelBookingSystem.Controllers
             return Ok(userBookings);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         [HttpGet("all")]
         public async Task<IActionResult> GetAllBookings()
+        {
+            var bookings = await _bookingManager.GetAllBookingsAsync();
+            return Ok(bookings);
+        }
+
+        // Chatbot endpoint without authentication
+        [HttpGet("chatbot/all")]
+        public async Task<IActionResult> GetAllBookingsForChatbot()
         {
             var bookings = await _bookingManager.GetAllBookingsAsync();
             return Ok(bookings);
