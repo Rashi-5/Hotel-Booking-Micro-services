@@ -160,12 +160,12 @@ if (storageType.Equals("Database", StringComparison.OrdinalIgnoreCase))
     }
 }
 
-// Configure the HTTP request pipeline
-if (app.Environment.IsDevelopment())
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Room Service API v1");
+    c.RoutePrefix = "swagger"; // Set swagger UI at /swagger
+});
 
 // Use CORS
 app.UseCors("AllowFrontend");
