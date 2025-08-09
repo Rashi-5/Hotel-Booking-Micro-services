@@ -25,6 +25,7 @@ builder.Services.AddCors(options =>
     });
 });
 
+var configuration = builder.Configuration;
 // Decide storage type from configuration
 var storageType = builder.Configuration["Storage:Type"] ?? "Database";
 
@@ -104,7 +105,6 @@ var app = builder.Build();
 // Database initialization only for Database storage type
 if (storageType.Equals("Database", StringComparison.OrdinalIgnoreCase))
 {
-    Console.WriteLine("=== DATABASE INITIALIZATION START ===");
     Console.WriteLine($"Storage type from config: {storageType}");
 
     using (var scope = app.Services.CreateScope())
@@ -122,8 +122,10 @@ if (storageType.Equals("Database", StringComparison.OrdinalIgnoreCase))
             
             if (roomCount == 0)
             {
-                Console.WriteLine("Seeding default rooms...");
-                await RoomSeedHelper.SeedDefaultRoomsAsync(context);
+                Console.WriteLine("Seeding default rooms from XML...");
+                var defaultRoomsXmlPath = configuration.GetValue<string>("Storage:DefaultRoomsXmlPath") ?? "Data/default-rooms.xml";
+                Console.WriteLine($"Using XML file: {defaultRoomsXmlPath}");
+                await RoomSeedHelper.SeedDefaultRoomsAsync(context, defaultRoomsXmlPath);
             }
         }
         catch (Exception ex)
