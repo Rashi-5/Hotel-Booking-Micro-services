@@ -36,8 +36,20 @@ if (storageType.Equals("XML", StringComparison.OrdinalIgnoreCase))
 }
 else
 {
-    builder.Services.AddDbContext<BookingDbContext>(options =>
-        options.UseSqlite("Data Source=booking.db"));
+    // Azure SQL or SQLite connection
+    var connectionString = builder.Configuration.GetConnectionString("BookingDatabase") ?? "Data Source=booking.db";
+    var isAzureSQL = connectionString.Contains("database.windows.net");
+    
+    if (isAzureSQL)
+    {
+        builder.Services.AddDbContext<BookingDbContext>(options =>
+            options.UseSqlServer(connectionString));
+    }
+    else
+    {
+        builder.Services.AddDbContext<BookingDbContext>(options =>
+            options.UseSqlite(connectionString));
+    }
     builder.Services.AddScoped<IBookingRepository, DatabaseBookingRepository>();
 }
 
@@ -115,9 +127,20 @@ if (storageType.Equals("Database", StringComparison.OrdinalIgnoreCase))
         
         try
         {
-            // Only create database if it doesn't exist
-            var created = context.Database.EnsureCreated();
-            Console.WriteLine($"Booking database created: {created}");
+            var connectionString = builder.Configuration.GetConnectionString("BookingDatabase") ?? "Data Source=booking.db";
+            
+            // Use Migrate for Azure SQL, EnsureCreated for SQLite
+            if (connectionString.Contains("database.windows.net"))
+            {
+                Console.WriteLine("Applying database migrations for Azure SQL...");
+                await context.Database.MigrateAsync();
+                Console.WriteLine("Azure SQL migrations completed");
+            }
+            else
+            {
+                var created = context.Database.EnsureCreated();
+                Console.WriteLine($"SQLite database created: {created}");
+            }
             
             // Check current booking count
             var bookingCount = await context.Bookings.CountAsync();

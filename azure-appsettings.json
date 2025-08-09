@@ -1,0 +1,42 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*",
+
+  "ConnectionStrings": {
+    "AuthDatabase": "Server=YOUR_SQL_SERVER.database.windows.net;Database=AuthDB;User Id=YOUR_USERNAME;Password=YOUR_PASSWORD;TrustServerCertificate=true;",
+    "BookingDatabase": "Server=YOUR_SQL_SERVER.database.windows.net;Database=BookingDB;User Id=YOUR_USERNAME;Password=YOUR_PASSWORD;TrustServerCertificate=true;",
+    "RoomDatabase": "Server=YOUR_SQL_SERVER.database.windows.net;Database=RoomDB;User Id=YOUR_USERNAME;Password=YOUR_PASSWORD;TrustServerCertificate=true;",
+    "ChatbotDatabase": "Server=YOUR_SQL_SERVER.database.windows.net;Database=ChatbotDB;User Id=YOUR_USERNAME;Password=YOUR_PASSWORD;TrustServerCertificate=true;"
+  },
+  
+  "ServiceUrls": {
+    "AuthService": "https://YOUR_AUTH_SERVICE.azurewebsites.net",
+    "BookingService": "https://YOUR_BOOKING_SERVICE.azurewebsites.net", 
+    "RoomService": "https://YOUR_ROOM_SERVICE.azurewebsites.net",
+    "ChatbotService": "https://YOUR_CHATBOT_SERVICE.azurewebsites.net",
+    "Frontend": "https://YOUR_FRONTEND.azurewebsites.net"
+  },
+  
+  "JwtSettings": {
+    "SecretKey": "5V8wVD4WNUsVQqNyaCl04SXyb5Q56mAC",
+    "Issuer": "HotelBookingSystem",
+    "Audience": "HotelBookingUsers", 
+    "ExpiryMinutes": 60
+  },
+  
+  "Storage": {
+    "Type": "Database"
+  },
+  
+  "CORS": {
+    "AllowedOrigins": [
+      "https://YOUR_FRONTEND.azurewebsites.net",
+      "https://localhost:5125"
+    ]
+  }
+}

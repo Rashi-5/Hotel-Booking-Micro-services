@@ -38,8 +38,20 @@ if (storageType.Equals("XML", StringComparison.OrdinalIgnoreCase))
 }
 else
 {
-    builder.Services.AddDbContext<RoomDbContext>(options =>
-        options.UseSqlite("Data Source=room.db"));
+    // Azure SQL or SQLite connection
+    var connectionString = builder.Configuration.GetConnectionString("RoomDatabase") ?? "Data Source=rooms.db";
+    var isAzureSQL = connectionString.Contains("database.windows.net");
+    
+    if (isAzureSQL)
+    {
+        builder.Services.AddDbContext<RoomDbContext>(options =>
+            options.UseSqlServer(connectionString));
+    }
+    else
+    {
+        builder.Services.AddDbContext<RoomDbContext>(options =>
+            options.UseSqlite(connectionString));
+    }
     builder.Services.AddScoped<IRoomRepository, DatabaseRoomRepository>();
 }
 
@@ -111,8 +123,21 @@ if (storageType.Equals("Database", StringComparison.OrdinalIgnoreCase))
     {
         var context = scope.ServiceProvider.GetRequiredService<RoomDbContext>();
                 
-        // Force database creation with current schema
-        var created = context.Database.EnsureCreated();
+        var connectionString = builder.Configuration.GetConnectionString("RoomDatabase") ?? "Data Source=rooms.db";
+        
+        // Use Migrate for Azure SQL, EnsureCreated for SQLite
+        if (connectionString.Contains("database.windows.net"))
+        {
+            Console.WriteLine("Applying database migrations for Azure SQL...");
+            await context.Database.MigrateAsync();
+            Console.WriteLine("Azure SQL migrations completed");
+        }
+        else
+        {
+            // Force database creation with current schema for SQLite
+            var created = context.Database.EnsureCreated();
+            Console.WriteLine($"SQLite database created: {created}");
+        }
         
         // Check if rooms table is empty and seed default rooms
         try

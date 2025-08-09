@@ -70,9 +70,22 @@ if (storageType.Equals("XML", StringComparison.OrdinalIgnoreCase))
 }
 else
 {
-    builder.Services.AddDbContext<AuthDbContext>(options =>
-        options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection") 
-                         ?? "Data Source=auth.db"));
+    // Azure SQL or SQLite connection
+    var connectionString = builder.Configuration.GetConnectionString("AuthDatabase") 
+                         ?? builder.Configuration.GetConnectionString("DefaultConnection") 
+                         ?? "Data Source=auth.db";
+    var isAzureSQL = connectionString.Contains("database.windows.net");
+    
+    if (isAzureSQL)
+    {
+        builder.Services.AddDbContext<AuthDbContext>(options =>
+            options.UseSqlServer(connectionString));
+    }
+    else
+    {
+        builder.Services.AddDbContext<AuthDbContext>(options =>
+            options.UseSqlite(connectionString));
+    }
     builder.Services.AddScoped<IUserStore, DbUserStore>();
 }
 
@@ -121,7 +134,22 @@ if (storageType.Equals("Database", StringComparison.OrdinalIgnoreCase))
     using (var scope = app.Services.CreateScope())
     {
         var context = scope.ServiceProvider.GetRequiredService<AuthDbContext>();
-        var created = context.Database.EnsureCreated();
+        var connectionString = builder.Configuration.GetConnectionString("AuthDatabase") 
+                             ?? builder.Configuration.GetConnectionString("DefaultConnection") 
+                             ?? "Data Source=auth.db";
+        
+        // Use Migrate for Azure SQL, EnsureCreated for SQLite
+        if (connectionString.Contains("database.windows.net"))
+        {
+            Console.WriteLine("Applying database migrations for Azure SQL...");
+            await context.Database.MigrateAsync();
+            Console.WriteLine("Azure SQL migrations completed");
+        }
+        else
+        {
+            var created = context.Database.EnsureCreated();
+            Console.WriteLine($"SQLite database created: {created}");
+        }
     }
 }
 

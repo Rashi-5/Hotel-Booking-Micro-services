@@ -24,9 +24,22 @@ builder.Services.AddCors(options =>
     });
 });
 
-// Add Database
-builder.Services.AddDbContext<ChatbotDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+// Add Database - Azure SQL or SQLite
+var connectionString = builder.Configuration.GetConnectionString("ChatbotDatabase") 
+                     ?? builder.Configuration.GetConnectionString("DefaultConnection") 
+                     ?? "Data Source=chatbot.db";
+var isAzureSQL = connectionString.Contains("database.windows.net");
+
+if (isAzureSQL)
+{
+    builder.Services.AddDbContext<ChatbotDbContext>(options =>
+        options.UseSqlServer(connectionString));
+}
+else
+{
+    builder.Services.AddDbContext<ChatbotDbContext>(options =>
+        options.UseSqlite(connectionString));
+}
 
 // Add HttpClient services for external APIs
 builder.Services.AddHttpClient<IBookingServiceClient, BookingServiceClient>(client =>
@@ -63,8 +76,22 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<ChatbotDbContext>();
-    context.Database.EnsureCreated();
-    Console.WriteLine("ChatbotService database initialized.");
+    var dbConnectionString = builder.Configuration.GetConnectionString("ChatbotDatabase") 
+                           ?? builder.Configuration.GetConnectionString("DefaultConnection") 
+                           ?? "Data Source=chatbot.db";
+    
+    // Use Migrate for Azure SQL, EnsureCreated for SQLite
+    if (dbConnectionString.Contains("database.windows.net"))
+    {
+        Console.WriteLine("Applying database migrations for Azure SQL...");
+        await context.Database.MigrateAsync();
+        Console.WriteLine("Azure SQL migrations completed");
+    }
+    else
+    {
+        var created = context.Database.EnsureCreated();
+        Console.WriteLine($"SQLite database created: {created}");
+    }
 }
 
 // Configure the HTTP request pipeline

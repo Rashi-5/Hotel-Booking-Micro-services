@@ -146,3 +146,7 @@ dotnet run --urls="https://localhost:7111;http://localhost:5125"
 - Implement service discovery
 - Add monitoring and logging
 - Consider using a message queue for async operations
+
+
+#LOCAL RUN 
+dotnet run --environment Development
